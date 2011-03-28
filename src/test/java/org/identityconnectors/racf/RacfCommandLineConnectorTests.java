@@ -22,6 +22,10 @@
  */
 package org.identityconnectors.racf;
 
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.AssertJUnit;
 import static org.identityconnectors.racf.RacfConstants.ATTR_CL_ATTRIBUTES;
 import static org.identityconnectors.racf.RacfConstants.ATTR_CL_DATA;
 import static org.identityconnectors.racf.RacfConstants.ATTR_CL_DFLTGRP;
@@ -42,8 +46,6 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import junit.framework.Assert;
-
 import org.identityconnectors.common.script.Script;
 import org.identityconnectors.common.script.ScriptBuilder;
 import org.identityconnectors.common.security.GuardedString;
@@ -57,9 +59,6 @@ import org.identityconnectors.patternparser.MapTransform;
 import org.identityconnectors.patternparser.Transform;
 import org.identityconnectors.test.common.PropertyBag;
 import org.identityconnectors.test.common.TestHelpers;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
     protected static String       SYSTEM_USER2;
@@ -74,8 +73,8 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
         }
     }
 
-    @Before
-    public void before() throws IOException {
+    @BeforeMethod
+	public void before() throws IOException {
         super.before();
 
         // Need to shutdown and restart pool, so that we can properly check for messages
@@ -100,12 +99,12 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
        
         SYSTEM_USER_LDAP  = "racfid="+SYSTEM_USER+",profileType=user,"+SUFFIX;
         
-        Assert.assertNotNull("HOST_NAME must be specified", HOST_NAME);
-        Assert.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
-        Assert.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
-        Assert.assertNotNull("SYSTEM_PASSWORD2 must be specified", SYSTEM_PASSWORD2);
-        Assert.assertNotNull("SYSTEM_USER2 must be specified", SYSTEM_USER2);
-        Assert.assertNotNull("SUFFIX must be specified", SUFFIX);
+        AssertJUnit.assertNotNull("HOST_NAME must be specified", HOST_NAME);
+        AssertJUnit.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
+        AssertJUnit.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
+        AssertJUnit.assertNotNull("SYSTEM_PASSWORD2 must be specified", SYSTEM_PASSWORD2);
+        AssertJUnit.assertNotNull("SYSTEM_USER2 must be specified", SYSTEM_USER2);
+        AssertJUnit.assertNotNull("SUFFIX must be specified", SUFFIX);
     }
 
     private String makeLine(String string, int length) {
@@ -136,9 +135,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 System.out.println(entry.getKey()+"="+entry.getValue());
             }
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         } catch (Exception e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         }
     }
     
@@ -163,9 +162,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 System.out.println(entry.getKey()+"="+entry.getValue());
             }
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         } catch (Exception e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         }
     }
     
@@ -191,9 +190,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 System.out.println(entry.getKey()+"="+entry.getValue());
             }
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         } catch (Exception e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         }
     }
     
@@ -242,9 +241,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 System.out.println(entry.getKey()+"="+entry.getValue());
             }
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         } catch (Exception e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         }
     }
     
@@ -269,9 +268,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 System.out.println(entry.getKey()+"="+entry.getValue());
             }
         } catch (IOException e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         } catch (Exception e) {
-            Assert.fail(e.toString());
+            AssertJUnit.fail(e.toString());
         }
     }
 
@@ -355,7 +354,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 try {
                     testListAllGroups(config);
                 } catch (Exception ex) {
-                    Assert.fail(ex.toString());
+                    AssertJUnit.fail(ex.toString());
                 }
             }
         };
@@ -380,7 +379,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 try {
                     testListAllGroups(config);
                 } catch (Exception ex) {
-                    Assert.fail(ex.toString());
+                    AssertJUnit.fail(ex.toString());
                 }
             }
         };
@@ -409,7 +408,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 "returned connection for "+SYSTEM_USER2+" on oedipus.stc.com",
         };
         for (String expected : expectedMessages) {
-            Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+            AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
         }
     }
 
@@ -426,7 +425,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 try {
                     testListAllGroups(config);
                 } catch (Exception ex) {
-                    Assert.fail(ex.toString());
+                    AssertJUnit.fail(ex.toString());
                 }
             }
         };
@@ -450,14 +449,14 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                 "returned connection for "+SYSTEM_USER2+" on oedipus.stc.com",
         };
         for (String expected : expectedMessages) {
-            Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+            AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
         }
         boolean found = false;
         for (String message: messages) {
             if (message.startsWith("failed to create connection: userName '"+SYSTEM_USER))
                 found = true;
         }
-        Assert.assertTrue("Didn't see:failed to create connection: userName '"+SYSTEM_USER+"'", found);
+        AssertJUnit.assertTrue("Didn't see:failed to create connection: userName '"+SYSTEM_USER+"'", found);
     }
 
     @Test//@Ignore
@@ -479,7 +478,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
         };
         List<String> messages = logHandler.getMessages();
         for (String expected : expectedMessages) {
-            Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+            AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
         }
     }
 
@@ -504,7 +503,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                     "shut down test connection for "+SYSTEM_USER+" on oedipus.stc.com",
             };
             for (String expected : expectedMessages) {
-                Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+                AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
             }
         }
 
@@ -532,7 +531,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                     "shut down test connection for "+SYSTEM_USER2+" on oedipus.stc.com",
             };
             for (String expected : expectedMessages) {
-                Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+                AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
             }
         }
 
@@ -547,7 +546,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
             RacfConnector connector = createConnector(config);
             try {
                 connector.test();
-                Assert.fail("no exception thrown by test");
+                AssertJUnit.fail("no exception thrown by test");
             } catch (ConnectorException ce) {
                 // we expect this
             } finally {
@@ -561,7 +560,7 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
                     "creating inactive connection for "+SYSTEM_USER2+" on oedipus.stc.com",
             };
             for (String expected : expectedMessages) {
-                Assert.assertTrue("Didn't see:"+expected, messages.contains(expected));
+                AssertJUnit.assertTrue("Didn't see:"+expected, messages.contains(expected));
             }
         }
     }

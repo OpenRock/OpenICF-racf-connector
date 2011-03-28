@@ -1,5 +1,8 @@
 package org.identityconnectors.racf;
 
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.AssertJUnit;
 import static org.identityconnectors.racf.RacfConstants.ATTR_LDAP_ATTRIBUTES;
 import static org.identityconnectors.racf.RacfConstants.ATTR_LDAP_CONNECT_OWNER;
 import static org.identityconnectors.racf.RacfConstants.ATTR_LDAP_DATA;
@@ -19,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.Assert;
-
 import org.identityconnectors.common.security.GuardedString;
 import org.identityconnectors.framework.common.exceptions.ConnectorException;
 import org.identityconnectors.framework.common.objects.Attribute;
@@ -36,8 +37,6 @@ import org.identityconnectors.framework.common.objects.Uid;
 import org.identityconnectors.racf.RacfConnectorTestBase.TestHandler;
 import org.identityconnectors.test.common.PropertyBag;
 import org.identityconnectors.test.common.TestHelpers;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class RacfLdapConnectorTests extends RacfConnectorTestBase {
     public static void main(String[] args) {
@@ -60,10 +59,10 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
        
         SYSTEM_USER_LDAP  = "racfid="+SYSTEM_USER+",profileType=user,"+SUFFIX;
         
-        Assert.assertNotNull("HOST_NAME must be specified", HOST_NAME);
-        Assert.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
-        Assert.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
-        Assert.assertNotNull("SUFFIX must be specified", SUFFIX);
+        AssertJUnit.assertNotNull("HOST_NAME must be specified", HOST_NAME);
+        AssertJUnit.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
+        AssertJUnit.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
+        AssertJUnit.assertNotNull("SUFFIX must be specified", SUFFIX);
     }
 
     protected void initializeCommandLineConfiguration(RacfConfiguration config) throws IOException {
@@ -166,7 +165,7 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
                 TestHandler handler = new TestHandler();
                 TestHelpers.search(connector,ObjectClass.ACCOUNT, null, handler, null);
                 for (ConnectorObject user : handler) {
-                    Assert.assertFalse(user.getUid().getUidValue().startsWith("racfid=I"));
+                    AssertJUnit.assertFalse(user.getUid().getUidValue().startsWith("racfid=I"));
                 }
             } finally {
                 connector.dispose();
@@ -179,9 +178,9 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
             try {
                 TestHandler handler = new TestHandler();
                 TestHelpers.search(connector,ObjectClass.ACCOUNT, null, handler, null);
-                Assert.assertTrue(handler.iterator().hasNext());
+                AssertJUnit.assertTrue(handler.iterator().hasNext());
                 for (ConnectorObject user : handler) {
-                    Assert.assertTrue(user.getUid().getUidValue().startsWith("racfid=I"));
+                    AssertJUnit.assertTrue(user.getUid().getUidValue().startsWith("racfid=I"));
                 }
             } finally {
                 connector.dispose();
@@ -194,9 +193,9 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
             try {
                 TestHandler handler = new TestHandler();
                 TestHelpers.search(connector,ObjectClass.ACCOUNT, null, handler, null);
-                Assert.assertTrue(handler.iterator().hasNext());
+                AssertJUnit.assertTrue(handler.iterator().hasNext());
                 for (ConnectorObject user : handler) {
-                    Assert.assertTrue(
+                    AssertJUnit.assertTrue(
                             user.getUid().getUidValue().startsWith("racfid=Z") ||
                             user.getUid().getUidValue().startsWith("racfid=I")
                             );
@@ -278,7 +277,7 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
                 changed.add(user.getUid());
                 try {
                     connector.update(ObjectClass.ACCOUNT, changed, null);
-                    Assert.fail("Command should have failed");
+                    AssertJUnit.fail("Command should have failed");
                 } catch (IllegalArgumentException ce) {
                     System.out.println(ce);
                 } catch (ConnectorException ce) {
@@ -290,7 +289,7 @@ public class RacfLdapConnectorTests extends RacfConnectorTestBase {
             //Attribute racfInstallationData = changedUser.getAttributeByName("racfinstallationdata");
             Attribute racfInstallationData = changedUser.getAttributeByName(getInstallationDataAttributeName());
             displayConnectorObject(changedUser);
-            Assert.assertTrue(AttributeUtil.getStringValue(racfInstallationData).trim().equalsIgnoreCase("modified data"));
+            AssertJUnit.assertTrue(AttributeUtil.getStringValue(racfInstallationData).trim().equalsIgnoreCase("modified data"));
             displayConnectorObject(getUser(makeUid("IDM01", ObjectClass.ACCOUNT).getUidValue(), connector));
             displayConnectorObject(getUser(makeUid("IDM01", ObjectClass.ACCOUNT).getUidValue(), connector));
         } finally {

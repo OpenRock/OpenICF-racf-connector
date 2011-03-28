@@ -22,6 +22,9 @@
  */
 package org.identityconnectors.racf;
 
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.AssertJUnit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,8 +41,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
-
-import junit.framework.Assert;
 
 import org.identityconnectors.common.CollectionUtil;
 import org.identityconnectors.common.l10n.CurrentLocale;
@@ -67,10 +68,7 @@ import org.identityconnectors.framework.common.objects.filter.EndsWithFilter;
 import org.identityconnectors.framework.common.objects.filter.EqualsFilter;
 import org.identityconnectors.framework.common.objects.filter.StartsWithFilter;
 import org.identityconnectors.test.common.TestHelpers;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
 public abstract class RacfConnectorTestBase {
     // Connector Configuration information
@@ -103,8 +101,8 @@ public abstract class RacfConnectorTestBase {
     protected static final String NETVIEW_PARSER      = "org/identityconnectors/racf/NetviewSegmentParser.xml";
     protected static final String CATALOG_PARSER      = "org/identityconnectors/racf/CatalogParser.xml";
 
-    @Before
-    public void before() throws IOException {
+    @BeforeMethod
+	public void before() throws IOException {
         TEST_USER_UID     = makeUid(TEST_USER, ObjectClass.ACCOUNT);
         TEST_USER_UID2    = makeUid(TEST_USER2, ObjectClass.ACCOUNT);
         TEST_GROUP1_UID   = makeUid(TEST_GROUP1, RacfConnector.RACF_GROUP);
@@ -137,7 +135,8 @@ public abstract class RacfConnectorTestBase {
         testListAllGroups(config);
     }
     
-    public void testListAllGroups(RacfConfiguration config) throws Exception {
+    @Test
+	public void testListAllGroups(RacfConfiguration config) throws Exception {
         RacfConnector connector = createConnector(config);
         try {
             TestHandler handler = new TestHandler();
@@ -236,8 +235,8 @@ public abstract class RacfConnectorTestBase {
                         found = true;
                     count++;
                 }
-                Assert.assertTrue(found);
-                Assert.assertTrue(count==1);
+                AssertJUnit.assertTrue(found);
+                AssertJUnit.assertTrue(count==1);
             }
             {
                 int count = 0;
@@ -249,8 +248,8 @@ public abstract class RacfConnectorTestBase {
                         found = true;
                     count++;
                 }
-                Assert.assertTrue(found);
-                Assert.assertTrue(count==1);
+                AssertJUnit.assertTrue(found);
+                AssertJUnit.assertTrue(count==1);
             }
             //TODO: these aren't real meaningful for ldap ids...
             {
@@ -263,7 +262,7 @@ public abstract class RacfConnectorTestBase {
                         found = true;
                     count++;
                 }
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(found);
             }
             {
                 int count = 0;
@@ -275,7 +274,7 @@ public abstract class RacfConnectorTestBase {
                         found = true;
                     count++;
                 }
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(found);
             }
             {
                 int count = 0;
@@ -287,7 +286,7 @@ public abstract class RacfConnectorTestBase {
                         found = true;
                     count++;
                 }
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(found);
             }
         } finally {
             connector.dispose();
@@ -312,8 +311,8 @@ public abstract class RacfConnectorTestBase {
                     found = true;
                 count++;
             }
-            Assert.assertTrue(found);
-            Assert.assertTrue(count==1);
+            AssertJUnit.assertTrue(found);
+            AssertJUnit.assertTrue(count==1);
         } finally {
             connector.dispose();
         }
@@ -392,7 +391,7 @@ public abstract class RacfConnectorTestBase {
                 changed.add(user.getUid());
                 try {
                     connector.update(ObjectClass.ACCOUNT, changed, null);
-                    Assert.fail("Command should have failed");
+                    AssertJUnit.fail("Command should have failed");
                 } catch (ConnectorException ce) {
                     System.out.println(ce);
                 }
@@ -402,7 +401,7 @@ public abstract class RacfConnectorTestBase {
             //Attribute racfInstallationData = changedUser.getAttributeByName("racfinstallationdata");
             Attribute racfInstallationData = changedUser.getAttributeByName(getInstallationDataAttributeName());
             displayConnectorObject(changedUser);
-            Assert.assertTrue(AttributeUtil.getStringValue(racfInstallationData).trim().equalsIgnoreCase("modified data"));
+            AssertJUnit.assertTrue(AttributeUtil.getStringValue(racfInstallationData).trim().equalsIgnoreCase("modified data"));
             displayConnectorObject(getUser(makeUid("IDM01", ObjectClass.ACCOUNT).getUidValue(), connector));
             displayConnectorObject(getUser(makeUid("IDM01", ObjectClass.ACCOUNT).getUidValue(), connector));
         } finally {
@@ -414,12 +413,12 @@ public abstract class RacfConnectorTestBase {
         if (attribute.getName().equals(getAttributesAttributeName())) {
             Set<Object> set1 = new HashSet<Object>(attribute.getValue());
             Attribute attribute2 = object.getAttributeByName(attribute.getName());
-            Assert.assertNotNull(attribute2);
+            AssertJUnit.assertNotNull(attribute2);
             Set<Object> set2 = new HashSet<Object>(attribute.getValue());
-            Assert.assertEquals(set1, set2);
+            AssertJUnit.assertEquals(set1, set2);
             // must compare as sets
         } else {
-            Assert.assertEquals(object.getAttributeByName(attribute.getName()), attribute);
+            AssertJUnit.assertEquals(object.getAttributeByName(attribute.getName()), attribute);
         }
     }
     
@@ -558,7 +557,7 @@ public abstract class RacfConnectorTestBase {
             deleteUser(TEST_USER_UID, connector);
             try {
                 connector.resolveUsername(ObjectClass.ACCOUNT, TEST_USER, new OperationOptions(new HashMap()));
-                Assert.fail("exception expected");
+                AssertJUnit.fail("exception expected");
             } catch (UnknownUidException ue) {
                 // expected
             }
@@ -568,7 +567,7 @@ public abstract class RacfConnectorTestBase {
             Uid newUid = connector.create(ObjectClass.ACCOUNT, attrs, null);
             System.out.println(newUid.getValue()+" created");
             Uid retrievedUid = connector.resolveUsername(ObjectClass.ACCOUNT, TEST_USER, new OperationOptions(new HashMap()));
-            Assert.assertEquals(newUid, retrievedUid);
+            AssertJUnit.assertEquals(newUid, retrievedUid);
         } finally {
             connector.dispose();
         }
@@ -644,19 +643,19 @@ public abstract class RacfConnectorTestBase {
                 Set<Attribute> groupAttrs = new HashSet<Attribute>();
                 groupAttrs.add(new Name(TEST_GROUP1_UID.getUidValue()));
                 Uid groupUid = connector.create(RacfConnector.RACF_GROUP, groupAttrs, options);
-                Assert.assertNotNull(groupUid);
+                AssertJUnit.assertNotNull(groupUid);
             }
             {
                 Set<Attribute> groupAttrs = new HashSet<Attribute>();
                 groupAttrs.add(new Name(TEST_GROUP2_UID.getUidValue()));
                 Uid groupUid = connector.create(RacfConnector.RACF_GROUP, groupAttrs, options);
-                Assert.assertNotNull(groupUid);
+                AssertJUnit.assertNotNull(groupUid);
             }
             {
                 Set<Attribute> groupAttrs = new HashSet<Attribute>();
                 groupAttrs.add(new Name(TEST_GROUP3_UID.getUidValue()));
                 Uid groupUid = connector.create(RacfConnector.RACF_GROUP, groupAttrs, options);
-                Assert.assertNotNull(groupUid);
+                AssertJUnit.assertNotNull(groupUid);
             }
             {
                 // Create a user with 2 groups, and specify a default group
@@ -682,16 +681,16 @@ public abstract class RacfConnectorTestBase {
                 
                 ConnectorObject user = getUser(makeUid(TEST_USER2, ObjectClass.ACCOUNT).getUidValue(), connector);
                 Attribute groupsAttr = user.getAttributeByName(getGroupsAttributeName());
-                Assert.assertNotNull(groupsAttr);
+                AssertJUnit.assertNotNull(groupsAttr);
                 List<Object> retrievedGroups = groupsAttr.getValue();
-                Assert.assertTrue(retrievedGroups.size()==2);
-                Assert.assertTrue(allGroups.contains(((String)retrievedGroups.get(0)).toUpperCase()));
-                Assert.assertTrue(allGroups.contains(((String)retrievedGroups.get(1)).toUpperCase()));
+                AssertJUnit.assertTrue(retrievedGroups.size()==2);
+                AssertJUnit.assertTrue(allGroups.contains(((String)retrievedGroups.get(0)).toUpperCase()));
+                AssertJUnit.assertTrue(allGroups.contains(((String)retrievedGroups.get(1)).toUpperCase()));
     
                 Attribute defaultGroupAttr = user.getAttributeByName(getDefaultGroupName());
-                Assert.assertNotNull(defaultGroupAttr);
+                AssertJUnit.assertNotNull(defaultGroupAttr);
                 List<Object> defaultGroupAttrValue = defaultGroupAttr.getValue();
-                Assert.assertEquals(defaultGroupAttrValue.get(0).toString().toUpperCase(), TEST_GROUP1_UID.getUidValue().toUpperCase());
+                AssertJUnit.assertEquals(defaultGroupAttrValue.get(0).toString().toUpperCase(), TEST_GROUP1_UID.getUidValue().toUpperCase());
             }
             {
                 ConnectorObject user = getUser(makeUid(TEST_USER2, ObjectClass.ACCOUNT).getUidValue(), connector);
@@ -709,17 +708,17 @@ public abstract class RacfConnectorTestBase {
                 
                 user = getUser(makeUid(TEST_USER2, ObjectClass.ACCOUNT).getUidValue(), connector);
                 Attribute groupsAttr = user.getAttributeByName(getGroupsAttributeName());
-                Assert.assertNotNull(groupsAttr);
+                AssertJUnit.assertNotNull(groupsAttr);
                 SortedSet<String> retrievedGroups = CollectionUtil.newCaseInsensitiveSet();
                 for (Object value : groupsAttr.getValue()) 
                     retrievedGroups.add((String)value);
-                Assert.assertTrue(retrievedGroups.size()==2);
-                Assert.assertTrue(retrievedGroups.contains(TEST_GROUP3_UID.getUidValue().toUpperCase()));
+                AssertJUnit.assertTrue(retrievedGroups.size()==2);
+                AssertJUnit.assertTrue(retrievedGroups.contains(TEST_GROUP3_UID.getUidValue().toUpperCase()));
     
                 Attribute defaultGroupAttr = user.getAttributeByName(getDefaultGroupName());
-                Assert.assertNotNull(defaultGroupAttr);
+                AssertJUnit.assertNotNull(defaultGroupAttr);
                 List<Object> defaultGroupAttrValue = defaultGroupAttr.getValue();
-                Assert.assertEquals(defaultGroupAttrValue.get(0).toString().toUpperCase(), TEST_GROUP1_UID.getUidValue().toUpperCase());
+                AssertJUnit.assertEquals(defaultGroupAttrValue.get(0).toString().toUpperCase(), TEST_GROUP1_UID.getUidValue().toUpperCase());
             }
             
             deleteUser(TEST_USER_UID2, connector);
@@ -757,7 +756,7 @@ public abstract class RacfConnectorTestBase {
             //
             try {
                 connector.delete(ObjectClass.ACCOUNT, TEST_USER_UID, null);
-                Assert.fail("should have thrown");
+                AssertJUnit.fail("should have thrown");
             } catch (UnknownUidException uue) {
                 // expected
             }
