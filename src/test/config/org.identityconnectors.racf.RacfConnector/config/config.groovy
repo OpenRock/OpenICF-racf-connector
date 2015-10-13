@@ -1,7 +1,7 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2011-2015 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -9,13 +9,13 @@
  * compliance with the License.
  *
  * You can obtain a copy of the License at
- * http://forgerock.org/license/CDDLv1.0.html
+ * http://opensource.org/licenses/CDDL-1.0
  * See the License for the specific language governing
  * permission and limitations under the License.
  *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at http://forgerock.org/license/CDDLv1.0.html
+ * at http://opensource.org/licenses/CDDL-1.0
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
@@ -27,6 +27,7 @@
 
 /* TestNG Connector configuration */
 
+LDAP_HOST_NAME="__configureme__"
 HOST_NAME="__configureme__"
 SYSTEM_PASSWORD="__configureme__"
 SYSTEM_PASSWORD2="__configureme__"
@@ -40,10 +41,6 @@ SYSTEM_USER2="__configureme__"
  *  ----------- Contract Tests configuration ------------
  *  +---------------------------------------------------+ 
  */
-
-import org.identityconnectors.contract.data.groovy.Lazy
-import org.identityconnectors.common.security.GuardedString
-
 
 testsuite {
     // path to bundle jar - property is set by TestNG - leave it as it is

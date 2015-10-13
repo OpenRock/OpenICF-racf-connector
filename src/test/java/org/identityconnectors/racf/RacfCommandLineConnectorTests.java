@@ -19,9 +19,11 @@
  * enclosed by brackets [] replaced by your own identifying information: 
  * "Portions Copyrighted [year] [name of copyright owner]"
  * ====================
+ * Portions Copyrighted 2015 ForgeRock AS
  */
 package org.identityconnectors.racf;
 
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeClass;
@@ -91,6 +93,9 @@ public class RacfCommandLineConnectorTests extends RacfConnectorTestBase {
         PropertyBag testProps = TestHelpers.getProperties(RacfConnector.class);
 
         HOST_NAME         = testProps.getStringProperty("HOST_NAME");
+        if ("__configureme__".equals(HOST_NAME)) {
+            throw new SkipException("REST Sample tests are skipped. Create private configuration!");
+        }
         SYSTEM_PASSWORD   = testProps.getStringProperty("SYSTEM_PASSWORD");
         SYSTEM_PASSWORD2  = testProps.getStringProperty("SYSTEM_PASSWORD2");
         SUFFIX            = testProps.getStringProperty("SUFFIX");
