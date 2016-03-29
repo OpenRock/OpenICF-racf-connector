@@ -31,7 +31,7 @@
     </parent>
     <groupId>org.forgerock.openicf.connectors</groupId>
     <artifactId>racf-connector</artifactId>
-    <version>1.1.0.0</version>
+    <version>1.1.1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>IBM RACF Connector</name>
     <description>IBM RACF Connector</description>
@@ -48,7 +48,7 @@
         <connection>scm:git:ssh://git@stash.forgerock.org:7999/openicf/racf-connector.git</connection>
         <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openicf/racf-connector.git</developerConnection>
         <url>http://stash.forgerock.org/projects/OPENICF/repos/racf-connector/browse/</url>
-      <tag>1.1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
     <properties>
         <maven.compiler.target>1.7</maven.compiler.target>
